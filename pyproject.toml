@@ -1,0 +1,214 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hexstrike-ai"
+dynamic = ["version"]
+description = "高级AI驱动渗透测试框架"
+readme = "README_CN.md"
+license = {text = "MIT"}
+authors = [
+    {name = "HexStrike AI Team", email = "team@hexstrike.ai"}
+]
+maintainers = [
+    {name = "HexStrike AI Team", email = "team@hexstrike.ai"}
+]
+keywords = [
+    "penetration-testing",
+    "security", 
+    "ai",
+    "automation",
+    "vulnerability-assessment",
+    "red-team",
+    "bug-bounty",
+    "ctf",
+    "security-tools"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators", 
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: System :: Penetration Testing",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Software Development :: Testing",
+    "Environment :: Console",
+    "Environment :: Web Environment"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "flask>=2.3.0,<4.0.0",
+    "requests>=2.31.0,<3.0.0",
+    "psutil>=5.9.0,<6.0.0",
+    "fastmcp>=0.2.0,<1.0.0",
+    "beautifulsoup4>=4.12.0,<5.0.0",
+    "selenium>=4.15.0,<5.0.0",
+    "aiohttp>=3.8.0,<4.0.0",
+    "mitmproxy>=9.0.0,<11.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0,<8.0.0",
+    "pytest-cov>=4.1.0,<5.0.0",
+    "pytest-asyncio>=0.21.0,<1.0.0",
+    "black>=23.0.0,<24.0.0",
+    "flake8>=6.0.0,<7.0.0",
+    "mypy>=1.5.0,<2.0.0",
+    "isort>=5.12.0,<6.0.0"
+]
+docs = [
+    "sphinx>=7.1.0,<8.0.0",
+    "sphinx-rtd-theme>=1.3.0,<2.0.0",
+    "mkdocs>=1.5.0,<2.0.0",
+    "mkdocs-material>=9.2.0,<10.0.0"
+]
+security = [
+    "bandit>=1.7.5,<2.0.0",
+    "safety>=2.3.0,<3.0.0",
+    "pip-audit>=2.6.0,<3.0.0"
+]
+binary-analysis = [
+    "pwntools>=4.10.0,<5.0.0",
+    "angr>=9.2.0,<10.0.0"
+]
+all = [
+    "hexstrike-ai[dev,docs,security,binary-analysis]"
+]
+
+[project.urls]
+Homepage = "https://github.com/0x4m4/hexstrike-ai"
+Documentation = "https://docs.hexstrike.ai"
+Repository = "https://github.com/0x4m4/hexstrike-ai.git"
+"Bug Tracker" = "https://github.com/0x4m4/hexstrike-ai/issues"
+Changelog = "https://github.com/0x4m4/hexstrike-ai/blob/main/CHANGELOG.md"
+
+[project.scripts]
+hexstrike = "hexstrike_server_new:main"
+hexstrike-server = "hexstrike_server_new:main"
+hexstrike-mcp = "hexstrike_mcp:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "hexstrike_ai.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hexstrike_ai*"]
+exclude = ["tests*", "docs*"]
+
+[tool.setuptools.package-data]
+hexstrike_ai = [
+    "config/*.py",
+    "assets/*",
+    "*.json",
+    "*.md"
+]
+
+# Black代码格式化配置
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # 排除的目录
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+# isort导入排序配置
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["hexstrike_ai"]
+known_third_party = ["flask", "requests", "psutil", "fastmcp", "selenium", "aiohttp"]
+
+# MyPy类型检查配置
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+ignore_missing_imports = true
+
+# Pytest测试配置
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--cov=hexstrike_ai",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml"
+]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning"
+]
+markers = [
+    "slow: 标记测试为慢速测试",
+    "integration: 标记为集成测试",
+    "unit: 标记为单元测试",
+    "security: 标记为安全相关测试"
+]
+
+# Coverage配置
+[tool.coverage.run]
+source = ["hexstrike_ai"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "setup.py",
+    "*/conftest.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+]
+
+# Bandit安全检查配置
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+skips = ["B101", "B601"]  # 跳过assert和shell注入检查（在测试环境中）
