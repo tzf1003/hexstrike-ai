@@ -3,11 +3,15 @@
     "hexstrike-ai": {
       "command": "python3",
       "args": [
-        "/path/hexstrike_mcp.py",
-        "--server",
-        "http://localhost:8888"
+        "/path/to/hexstrike-ai/hexstrike_mcp_new.py",
+        "--server-url",
+        "http://localhost:8888",
+        "--name",
+        "hexstrike-ai-mcp",
+        "--timeout",
+        "300"
       ],
-      "description": "HexStrike AI v6.0 - Advanced Cybersecurity Automation Platform",
+      "description": "HexStrike AI v6.0 MCP客户端 - 重构版本，支持150+安全工具的AI代理通信接口",
       "timeout": 300,
       "alwaysAllow": []
     }
